@@ -1,0 +1,77 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <!-- Required meta tags -->
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+        <!-- Bootstrap CSS -->
+        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+        <link rel="stylesheet" href="css/videojuegos.css">
+
+        <title>Tienda VJ</title>
+    </head>
+    <body>
+        <nav class="navbar navbar-dark bg-dark">
+            <a class="navbar-brand" href="/">
+                <!-- th:src para especificar rutas -->
+                <img th:src="@{/img/logo.png}" width="30" height="30" alt="">
+                Tienda VJ
+            </a>
+            <!-- accion del formulario es ir a la url /buscar que esta escuchando un controlador -->
+            <form th:action="@{/buscar}" class="form-inline my-2 my-lg-0">
+                <!-- name="q" para especificar que el atributo enviado por la url se llamara q -->
+                <input autofocus="autofocus" name="q" class="form-control mr-sm-2" type="search" placeholder="Buscar" aria-label="Search">
+                <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Buscar</button>
+            </form>
+        </nav>
+
+        <div class="container mt-4 vj-destacados">
+            <div class="row">
+                <div class="col-md-12">
+                    <h1>Nuevo juego</h1>
+                    <!-- metodo post para que los datos vayan en el body y no por la URL -->
+                    <!-- th:object el objeto que se va a cargar en el formulario -->
+                    <!-- th:action es la url a la que se envia el formulario -->
+                    <form method="POST" th:action="@{/videojuegos/guardar}" th:object="${videojuego}">
+                        <div class="form-group">
+                            <label for="nombre">Nombre</label>
+                            <!-- cada input,textarea o select  debe ir con th:field={*nombredelatributodelobjeto} -->
+                            <input th:field="*{nombre}" type="text" class="form-control" id="nombre" placeholder="Nombre del videojuego">
+                            <!-- se pasa el id para saber si es un objeto nuevo o uno recuperado de la base de datos -->
+                            <input type="hidden" th:field="*{id}" id="id">
+                        </div>
+                        <div class="form-group">
+                            <label for="descripcion">Descripción</label>
+                            <input th:field="*{descripcion}" type="text" class="form-control" id="descripcion" placeholder="Descripción">
+                        </div>
+                        <div class="form-group">
+                            <label for="urlImagen">Descripción</label>
+                            <input th:field="*{urlImagen}" type="text" class="form-control" id="urlImagen" placeholder="Url de la imagen">
+                        </div>
+                        <div>
+                            <div class="form-group">
+                                <label for="distribuidor">Distribuidor</label>
+                                <select th:field="*{distribuidor}" class="form-control" id="distribuidor">
+                                    <!-- th:each para recorrer una lista que se ha pasado al modelo -->
+                                    <!-- th:text para mostrar un texto dinamico -->
+                                    <!-- th:value para devolver un valor segun la opcion seleccionada, en este caso el id ya que si no nos devolveria el nombre -->
+                                    <option th:each="distribuidor : ${distribuidor}" th:text="${distribuidor.nombre}" th:value="${distribuidor.id}"></option>
+                                </select>
+                            </div>
+                        </div>
+                        <!-- th:if condicional, mostraremos un bonton diferente dependiendo de si vamos a modificar o crear un videojuego -->
+                        <button type="submit" class="btn btn-primary" th:if="${videojuego.id!=null}" th:text="Modificar"></button>
+                        <button type="submit" class="btn btn-primary" th:if="${videojuego.id==null}" th:text="Crear"></button>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <!-- Optional JavaScript -->
+        <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+        <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+        <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+    </body>
+</html>
